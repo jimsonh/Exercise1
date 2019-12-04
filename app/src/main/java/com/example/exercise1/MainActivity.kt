@@ -3,14 +3,33 @@ package com.example.exercise1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var carPrice : EditText
+    lateinit var downPayment : EditText
+    lateinit var loanPeriod : EditText
+    lateinit var interestRate : EditText
+
+    lateinit var loanText : TextView
+    lateinit var interestText : TextView
+    lateinit var monthlyText : TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        carPrice = findViewById<EditText>(R.id.editTextCarPrice)
+        downPayment = findViewById<EditText>(R.id.editTextDownPayment)
+        loanPeriod = findViewById<EditText>(R.id.editTextLoanPeriod)
+        interestRate = findViewById<EditText>(R.id.editTextInterestRate)
+
+        loanText = findViewById<TextView>(R.id.textViewLoan)
+        interestText = findViewById<TextView>(R.id.textViewInterest)
+        monthlyText = findViewById<TextView>(R.id.textViewMonthlyRepayment)
 
         val calButton: Button = findViewById(R.id.buttonCalculate)
         val resetButton: Button = findViewById(R.id.buttonReset)
@@ -21,47 +40,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calculateLoan(){
+        val carLoan = carPrice.getText().toString().toDouble()-downPayment.getText().toString().toDouble()
+        val interest = carLoan*interestRate.getText().toString().toDouble()/100*loanPeriod.getText().toString().toDouble()
+        val monthlyPayment = (carLoan+interest)/loanPeriod.getText().toString().toDouble()/12
 
-        val carPrice = findViewById<TextView>(R.id.editTextCarPrice).getText().toString().toDouble()
-        val downPayment = findViewById<TextView>(R.id.editTextDownPayment).getText().toString().toDouble()
-        val loanPeriod = findViewById<TextView>(R.id.editTextLoanPeriod).getText().toString().toDouble()
-        val interest = findViewById<TextView>(R.id.editTextInterestRate).getText().toString().toDouble()
+        loanText.text = "Car loan: RM"+carLoan
+        interestText.text ="Interest: RM"+interest
+        monthlyText.text = "Monthly repayment: RM"+monthlyPayment
 
-        val loan = findViewById<TextView>(R.id.textViewLoan)
-        val interestOverTime = findViewById<TextView>(R.id.textViewInterest)
-        val monthlyPayment = findViewById<TextView>(R.id.textViewMonthlyRepayment)
 
-        val loanDouble = carPrice-downPayment
-        val interestOverTimeDouble = loanDouble*interest/100*loanPeriod
-        val monthlyPaymentDouble = (loanDouble+interestOverTimeDouble)/loanPeriod/12
 
-        loan.text = "RM"+loanDouble
-        interestOverTime.text ="RM"+interestOverTimeDouble
-        monthlyPayment.text = "RM"+monthlyPaymentDouble
+
 
 
 
     }
 
     private fun resetText(){
-        val carPrice = findViewById<TextView>(R.id.editTextCarPrice)
-        val downPayment = findViewById<TextView>(R.id.editTextDownPayment)
-        val loanPeriod = findViewById<TextView>(R.id.editTextLoanPeriod)
-        val interest = findViewById<TextView>(R.id.editTextInterestRate)
+        loanText.setText(R.string.loan)
+        interestText.setText(R.string.interest)
+        monthlyText.setText(R.string.monthly_repayment)
 
-        val loan = findViewById<TextView>(R.id.textViewLoan)
-        val interestOverTime = findViewById<TextView>(R.id.textViewInterest)
-        val monthlyPayment = findViewById<TextView>(R.id.textViewMonthlyRepayment)
-
-        carPrice.text=""
-        downPayment.text=""
-        loanPeriod.text=""
-        interest.text=""
-
-
-        loan.text = ""
-        interestOverTime.text = ""
-        monthlyPayment.text = ""
+        carPrice.setText("")
+        downPayment.setText("")
+        loanPeriod.setText("")
+        interestRate.setText("")
     }
 
 
